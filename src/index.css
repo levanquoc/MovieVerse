@@ -1,38 +1,19 @@
 /* ============================================
    📄 index.css - CSS toàn cục (Global Styles)
-   Áp dụng cho TOÀN BỘ ứng dụng
    ============================================ */
 
-/* 🔹 Reset CSS - Xóa margin/padding mặc định của trình duyệt */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  /* box-sizing: border-box → padding & border tính vào trong width/height */
+/* 🔹 Import toàn bộ style của TailwindCSS bản v4 */
+@import "tailwindcss";
+
+/* 🔹 Cấu hình màu nền toàn cục cho ứng dụng giống trước đây */
+@theme {
+  --color-brand-purple: #7c3aed;
+  --color-brand-bg: #0f0f1a;
+  --color-brand-card: #1a1a2e;
 }
 
-/* 🔹 Style cho body - nền tối, chữ sáng */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0f0f1a;     /* Nền tối xanh đen */
-  color: #e0e0e0;                /* Chữ màu xám sáng */
-  min-height: 100vh;             /* Chiều cao tối thiểu = toàn màn hình */
-  line-height: 1.6;              /* Khoảng cách giữa các dòng */
-}
-
-/* 🔹 Style cho thẻ <a> - link */
-a {
-  color: #7c3aed;               /* Màu tím */
-  text-decoration: none;         /* Bỏ gạch chân */
-}
-
-a:hover {
-  color: #a78bfa;               /* Sáng hơn khi hover */
-}
-
-/* 🔹 Container chính - căn giữa nội dung */
-.container {
-  max-width: 1200px;            /* Chiều rộng tối đa */
-  margin: 0 auto;               /* Căn giữa horizontally */
-  padding: 0 20px;              /* Padding 2 bên */
+  background-color: var(--color-brand-bg);
+  color: #e0e0e0;
+  min-height: 100vh;
 }

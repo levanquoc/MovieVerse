@@ -1,58 +1,37 @@
 // ============================================
-// 📄 Hero.jsx - Component Hero Section (Phần giới thiệu chính)
+// 📄 Hero.jsx - (Day 7: Tailwind CSS Refactor)
 // ============================================
 
 import SearchBar from './SearchBar'
 
-// 🔹 Nhận prop onSearch từ App truyền xuống để đưa tiếp cho SearchBar
 function Hero({ onSearch }) {
   return (
-    <section style={styles.hero}>
-      <h2 style={styles.title}>
+    // 🔹 Tailwind Classes:
+    // text-center, py-20 (80px), px-5 (20px)
+    // bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]
+    // rounded-b-[40px] (bo tròn góc dưới 40px)
+    <section className="text-center py-20 px-5 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] rounded-b-[40px]">
+      
+      {/* text-5xl (48px), font-bold text-white mb-4
+          drop-shadow-[0_0_20px_rgba(124,58,237,0.5)] -> Viết custom shadow trong [] */}
+      <h2 className="text-5xl font-bold text-white mb-4 drop-shadow-[0_0_20px_rgba(124,58,237,0.5)]">
         Khám phá thế giới điện ảnh 🍿
       </h2>
 
-      <p style={styles.subtitle}>
+      {/* text-lg (18px), text-[#a0a0b0], max-w-[600px] mx-auto (chính giữa), mb-8, leading-relaxed */}
+      <p className="text-lg text-[#a0a0b0] max-w-[600px] mx-auto mb-8 leading-relaxed">
         Tìm kiếm, khám phá và lưu lại những bộ phim yêu thích của bạn.
         <br />
         Hàng nghìn bộ phim đang chờ bạn!
       </p>
 
-      {/* 🔹 Chèn SearchBar vào thay cho Nút Khám Phá */}
-      {/* Truyền tiếp onSearch cho SearchBar để khi người dùng nhấn Tìm nó sẽ gọi ngược lên */}
-      <div style={styles.searchWrapper}>
+      {/* mt-8, px-5 */}
+      <div className="mt-8 px-5">
          <SearchBar onSearch={onSearch} />
       </div>
       
     </section>
   )
-}
-
-const styles = {
-  hero: {
-    textAlign: 'center',
-    padding: '80px 20px',
-    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-    borderRadius: '0 0 40px 40px',
-  },
-  title: {
-    fontSize: '48px',
-    fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: '16px',
-    textShadow: '0 0 20px rgba(124, 58, 237, 0.5)',
-  },
-  subtitle: {
-    fontSize: '18px',
-    color: '#a0a0b0',
-    maxWidth: '600px',
-    margin: '0 auto 32px',
-    lineHeight: '1.8',
-  },
-  searchWrapper: {
-    marginTop: '30px',
-    padding: '0 20px',
-  }
 }
 
 export default Hero

@@ -1,9 +1,9 @@
 // ============================================
-// 📄 MovieCard.jsx - (Day 6: Refactor với Badge) ⭐
+// 📄 MovieCard.jsx - (Day 7: Tailwind CSS Refactor) ⭐
 // ============================================
 
 import { useState } from 'react'
-import Badge from './Badge' // Nhập Component Badge mới tạo
+import Badge from './Badge'
 
 function MovieCard({
   title,
@@ -19,56 +19,64 @@ function MovieCard({
   const toggleFavorite = () => setIsFavorite(!isFavorite)
   const handleView = () => setViews(views + 1)
 
-  // ❌ TẠM BIỆT: Hàm getRatingColor dài thòng ở đây! (Đã chuyển xưng Badge lo)
-
   return (
-    <div style={styles.card}>
-      <div style={styles.posterContainer}>
-        <img src={poster} alt={title} style={styles.poster} />
-        <div onClick={toggleFavorite} style={styles.favoriteBtn}>
+    // bg-[#1a1a2e] rounded-2xl overflow-hidden border border-[#2a2a3e] 
+    // transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(124,58,237,0.3)]
+    // cursor-pointer relative group
+    <div className="bg-[#1a1a2e] rounded-2xl overflow-hidden border border-[#2a2a3e] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(124,58,237,0.3)] cursor-pointer relative group">
+      
+      <div className="relative">
+        {/* w-full h-[400px] object-cover block */}
+        <img src={poster} alt={title} className="w-full h-[400px] object-cover block" />
+        
+        {/* Nút Favorite: absolute top-3 right-3
+            bg-black/60 rounded-full w-10 h-10 flex items-center justify-center 
+            text-xl cursor-pointer backdrop-blur-sm select-none transition-transform hover:scale-110 */}
+        <div 
+          onClick={toggleFavorite} 
+          className="absolute top-3 right-3 bg-black/60 rounded-full w-10 h-10 flex items-center justify-center text-xl cursor-pointer backdrop-blur-sm select-none transition-transform hover:scale-110"
+        >
           {isFavorite ? '❤️' : '🤍'}
         </div>
         
-        {/* ============================================
-            🔹 CONDITIONAL RENDERING (Logical AND &&)
-            Chỉ hiện Badge "🔥 HOT" đè lên hình rạp NẾU rating >= 8 
-            ============================================ */}
         {rating >= 8 && (
-           <div style={styles.hotBadgeContainer}>
+           <div className="absolute top-4 left-4">
               <Badge type="hot">🔥 HOT</Badge>
            </div>
         )}
       </div>
 
-      <div style={styles.info}>
-        <h3 style={styles.title}>{title}</h3>
+      {/* p-4 */}
+      <div className="p-4">
+        <h3 className="text-lg font-bold text-white mb-2.5 truncate" title={title}>{title}</h3>
 
-        <div style={styles.meta}>
-          <span style={styles.metaItem}>📅 {year}</span>
-          {/* 🔹 Render Genre bằng Component Badge thay cho Chữ Tròn */}
+        {/* flex items-center gap-3 mb-3 */}
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-sm text-gray-400">📅 {year}</span>
           <Badge type="genre">🎭 {genre}</Badge>
         </div>
 
-        <div style={styles.ratingRow}>
-          {/* 🔹 Render Rating bằng Component Badge (Tự tìm màu luôn) */}
+        {/* flex justify-between items-center mb-3 */}
+        <div className="flex justify-between items-center mb-3">
           <Badge type="rating" value={rating}>
             ⭐ {rating.toFixed(1)}
           </Badge>
           
-          <span style={styles.views}>👁️ {views} lượt xem</span>
+          <span className="text-[13px] text-gray-400">👁️ {views} lượt xem</span>
         </div>
 
         {overview && (
-          <p style={styles.overview}>
-            {overview.length > 80
-              ? overview.substring(0, 80) + '...'
-              : overview
-            }
+          // text-[13px] text-gray-500 leading-relaxed mb-4 line-clamp-2
+          <p className="text-[13px] text-gray-500 leading-relaxed mb-4 line-clamp-2">
+            {overview}
           </p>
         )}
 
-        {/* 🔹 Render Text với Ternary */}
-        <button onClick={handleView} style={styles.button}>
+        {/* w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-colors mt-auto */}
+        <button 
+          onClick={handleView} 
+          className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-colors"
+        >
           {rating >= 8 ? '🔥 Đặt vé ngay' : '👀 Xem chi tiết'}
         </button>
       </div>
@@ -76,95 +84,5 @@ function MovieCard({
   )
 }
 
-const styles = {
-  card: {
-    backgroundColor: '#1a1a2e',
-    borderRadius: '16px',
-    overflow: 'hidden',
-    border: '1px solid #2a2a3e',
-    transition: 'transform 0.3s, box-shadow 0.3s',
-    cursor: 'pointer',
-    position: 'relative',
-  },
-  posterContainer: {
-    position: 'relative',
-  },
-  poster: {
-    width: '100%',
-    height: '400px',
-    objectFit: 'cover',
-    display: 'block',
-  },
-  favoriteBtn: {
-    position: 'absolute',
-    top: '12px',
-    right: '12px',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    borderRadius: '50%',
-    width: '40px',
-    height: '40px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '20px',
-    cursor: 'pointer',
-    backdropFilter: 'blur(4px)',
-    userSelect: 'none',
-    transition: 'transform 0.2s',
-  },
-  hotBadgeContainer: {
-    position: 'absolute',
-    top: '16px',
-    left: '16px',
-    // Căn trái cho chữ HOT
-  },
-  info: {
-    padding: '16px',
-  },
-  title: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: '10px',
-  },
-  meta: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    marginBottom: '12px',
-  },
-  metaItem: {
-    fontSize: '14px',
-    color: '#9ca3af',
-  },
-  ratingRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '12px',
-  },
-  views: {
-    fontSize: '13px',
-    color: '#9ca3af',
-  },
-  overview: {
-    fontSize: '13px',
-    color: '#6b7280',
-    lineHeight: '1.5',
-    marginBottom: '16px',
-  },
-  button: {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: '#7c3aed',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-  },
-}
-
+// ❌ XÓA SẠCH CSS Object 🎉🎉🎉
 export default MovieCard
