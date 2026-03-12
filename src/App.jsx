@@ -1,81 +1,54 @@
 // ============================================
-// 📄 App.jsx - (Day 8: useEffect & Side Effects)
+// 📄 App.jsx - (Day 9: React Router - Routing)
 // ============================================
 //
-// 🧠 BÀI HỌC DAY 8: useEffect (Giải quyết Side Effects)
-//
-// Vấn đề: 
-// Từ trước đến giờ ta lấy `sampleMovies` trực tiếp (Synchronous).
-// Thực tế, gọi API lấy phim mất từ 1-3 giây (Asynchronous).
-// Nếu gọi API trực tiếp trong thân Component -> React sẽ gọi lại API 
-// mỗi lần render (khi ta gõ chữ tìm kiếm) -> Treo máy! Lỗi vô hạn!
+// 🧠 BÀI HỌC DAY 9: Định tuyến Đa Trang (Routing)
+// Trước đây: App.jsx chứa cứng ngắc [ Header + Hero + List + Footer ]
+// Hiện tại:  App.jsx trở thành một KHUNG GIAO DIỆN CHUNG (Layout Wrapper).
+// Ở giữa Header và Footer sẽ là "Cái Cổng Chuyển Đổi" (Routes)
 // 
-// Giải pháp: Dùng `useEffect`
-// useEffect(hàm_xử_lý, [mảng_phụ_thuộc])
-// - Nếu mảng [] rỗng: Chỉ chạy 1 LẦN DUY NHẤT khi 컴 (Component) vừa bật lên.
-// - Đây là nơi lý tưởng để Gọi API lấy dữ liệu đầu tiên!
+// <Routes>
+//    - Người dùng vào "/"       -> Load nội dung <HomePage />
+//    - Người dùng vào "/saved"  -> Load nội dung <FavoritesPage />
+//    - Các lỗi đánh chữ bậy bạ  -> Load nội dung 404 (Trang không tồn tại)
+// </Routes>
 // ============================================
 
-import { useState, useEffect } from 'react' // 🔹 Import useEffect
+import { Routes, Route } from 'react-router-dom' // 🔹 Import bộ nắn Route
+
+// Layout Cố định (Lúc nào cũng có)
 import Header from './components/Header'
-import Hero from './components/Hero'
-import MovieList from './components/MovieList'
 import Footer from './components/Footer'
-import LoadingSpinner from './components/LoadingSpinner' // 🔹 Import Spinner
-import { sampleMovies } from './data/sampleMovies'
+
+// Các Trang con (Sẽ hoán đổi cho nhau tùy URL)
+import HomePage from './pages/HomePage'
+import FavoritesPage from './pages/FavoritesPage'
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState('')
-  
-  // 🔹 STATE MỚI: Dữ liệu phim (ban đầu là rỗng)
-  const [movies, setMovies] = useState([])
-  
-  // 🔹 STATE MỚI: Trạng thái đang tải chờ API (loading)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // ============================================
-  // 🔹 USE EFFECT: Gọi "Fake API" tự động 1 lần
-  // ============================================
-  useEffect(() => {
-    // 1. Giả lập việc gọi máy chủ mất 1.5 giây (1500ms)
-    console.log("App.jsx: Lần đầu tiên App bật lên -> Bắt đầu FETCH DATA...")
-    
-    const timer = setTimeout(() => {
-        // 2. Sau 1.5s, lấy được dữ liệu -> Lưu vào State movies
-        setMovies(sampleMovies)
-        
-        // 3. Tắt trạng thái Loading
-        setIsLoading(false)
-        console.log("App.jsx: FETCH DATA XONG! Cập nhật State...")
-    }, 1500)
-
-    // (Tùy chọn) 4. Cleanup function: Dọn dẹp bộ đếm khi Component bị hủy (rất quan trọng khi đổi trang web dài hạn)
-    return () => clearTimeout(timer)
-    
-  }, []) // ⚠️ MẢNG RỖNG: Cực kỳ quan trọng để nó chỉ chạy 1 lần. Nếu bỏ đi, nó chạy vô hạn lần!
-
-
-  const handleSearch = (keyword) => {
-    setSearchQuery(keyword)
-  }
-
-  // 🔹 Lọc trên biến `movies` (State) thay vì sampleMovies tĩnh
-  const filteredMovies = movies.filter((movie) => 
-     movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
+      {/* 1. Header LUÔN HIỂN THỊ ở mọi trang (Không nằm trong Route) */}
       <Header />
-      <Hero onSearch={handleSearch} />
       
-      {/* 🔹 KỸ THUẬT RẼ NHÁNH: Đang Loading thì hiện Vòng xoay, Xong rồi mới hiện Danh sách */}
-      {isLoading ? (
-         <LoadingSpinner />
-      ) : (
-         <MovieList movies={filteredMovies} searchQuery={searchQuery} />
-      )}
+      {/* 2. CHỖ HOÁN ĐỔI NỘI DUNG (Content Outlet) 
+          Phần flex-grow đảm bảo chỗ này đẩy Footer xuống tận cùng nếu trang ngắn
+      */}
+      <div className="flex-grow">
+        <Routes>
+          {/* Quy định: Đường dẫn "/" sẽ mở HomePage */}
+          <Route path="/" element={<HomePage />} />
+          
+          {/* Quy định: Đường dẫn "/favorites" sẽ mở Trang Yêu Thích */}
+          <Route path="/favorites" element={<FavoritesPage />} />
+
+          {/* Quy định: Bất kỳ URL rác nào (*) cũng rơi vào đây */}
+          <Route path="*" element={
+             <div className="text-center py-32 text-white">Lỗi 404: Không tìm thấy Trang!</div>
+          } />
+        </Routes>
+      </div>
       
+      {/* 3. Footer LUÔN HIỂN THỊ */}
       <Footer />
     </div>
   )
