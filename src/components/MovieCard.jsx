@@ -3,9 +3,11 @@
 // ============================================
 
 import { useState } from 'react'
+import { Link } from 'react-router-dom' // 🔹 Import thẻ Link
 import Badge from './Badge'
 
 function MovieCard({
+  id, // 🔹 NHẬN THÊM prop id từ MovieList truyền xuống
   title,
   year,
   rating = 0,
@@ -72,13 +74,13 @@ function MovieCard({
           </p>
         )}
 
-        {/* w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-colors mt-auto */}
-        <button 
-          onClick={handleView} 
-          className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-colors"
+        {/* 🔹 CHUYỂN TRANG MƯỢT MÀ BẰNG <Link> */}
+        <Link 
+          to={`/movie/${id}`}
+          className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-colors mt-auto block text-center"
         >
           {rating >= 8 ? '🔥 Đặt vé ngay' : '👀 Xem chi tiết'}
-        </button>
+        </Link>
       </div>
     </div>
   )

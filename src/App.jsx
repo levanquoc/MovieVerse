@@ -23,6 +23,7 @@ import Footer from './components/Footer'
 // Các Trang con (Sẽ hoán đổi cho nhau tùy URL)
 import HomePage from './pages/HomePage'
 import FavoritesPage from './pages/FavoritesPage'
+import MovieDetailPage from './pages/MovieDetailPage' // 🔹 BẠN MỚI: Import Trang Chi Tiết Phim
 
 function App() {
   return (
@@ -40,6 +41,10 @@ function App() {
           
           {/* Quy định: Đường dẫn "/favorites" sẽ mở Trang Yêu Thích */}
           <Route path="/favorites" element={<FavoritesPage />} />
+
+          {/* Quy định: Dấu hai chấm ":" tạo ra Biến Động trên URL (Dynamic Route) */}
+          {/* Ví dụ /movie/1 hay /movie/999 đều rơi vào trang này */}
+          <Route path="/movie/:id" element={<MovieDetailPage />} />
 
           {/* Quy định: Bất kỳ URL rác nào (*) cũng rơi vào đây */}
           <Route path="*" element={
